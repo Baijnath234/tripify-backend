@@ -55,7 +55,8 @@ public class AuthService {
         return new AuthResponse(
                 savedUser.getId(),
                 savedUser.getName(),
-                savedUser.getEmail()
+                savedUser.getEmail(),
+                savedUser.getRole()
         );
     }
 
@@ -93,7 +94,8 @@ public class AuthService {
         AuthResponse authResponse = new AuthResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRole()
         );
 
         return new LoginResponse(
