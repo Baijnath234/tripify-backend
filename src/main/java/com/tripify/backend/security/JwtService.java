@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import com.tripify.backend.entity.UserRole;
 
 @Service
 public class JwtService {
@@ -26,16 +27,18 @@ public class JwtService {
         this.jwtExpiration = jwtExpiration;
     }
 
-    public String generateToken(String userId, String email) {
-
+    public String generateToken(
+            String userId,
+            String email,
+            UserRole role
+    ) {
         Date now = new Date();
-        Date expiration = new Date(
-                now.getTime() + jwtExpiration
-        );
+        Date expiration = new Date(now.getTime() + jwtExpiration);
 
         return Jwts.builder()
                 .subject(userId)
                 .claim("email", email)
+                .claim("role", role.name())
                 .issuedAt(now)
                 .expiration(expiration)
                 .signWith(secretKey)
@@ -48,6 +51,11 @@ public class JwtService {
 
     public String extractEmail(String token) {
         return extractAllClaims(token).get("email", String.class);
+    }
+
+    public String extractRole(String token) {
+        return extractAllClaims(token)
+                .get("role", String.class);
     }
 
     public boolean isTokenValid(String token) {
