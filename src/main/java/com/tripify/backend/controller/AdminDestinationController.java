@@ -8,8 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.tripify.backend.dto.destination.DestinationPageResponse;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/destinations")
@@ -23,9 +23,23 @@ public class AdminDestinationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DestinationResponse>> getAllDestinations() {
+    public ResponseEntity<DestinationPageResponse> getAllDestinations(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) Boolean popular,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
         return ResponseEntity.ok(
-                destinationService.getAllDestinations()
+                destinationService.getAdminDestinations(
+                        search,
+                        country,
+                        active,
+                        popular,
+                        page,
+                        size
+                )
         );
     }
 

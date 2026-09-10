@@ -7,6 +7,10 @@ import com.tripify.backend.entity.Destination;
 import com.tripify.backend.repository.DestinationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.tripify.backend.dto.destination.DestinationPageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -102,6 +106,61 @@ public class DestinationService {
         }
 
         return new DestinationResponse(destination);
+    }
+
+    @Transactional(readOnly = true)
+    public DestinationPageResponse getAdminDestinations(
+            String search,
+            String country,
+            Boolean active,
+            Boolean popular,
+            int page,
+            int size) {
+
+        if (page < 0) {
+            page = 0;
+        }
+
+        if (size < 1) {
+            size = 10;
+        }
+
+        if (size > 100) {
+            size = 100;
+        }
+
+        search = normalizeFilter(search);
+        country = normalizeFilter(country);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Destination> destinationPage =
+                destinationRepository.searchAdminDestinations(
+                        search,
+                        country,
+                        active,
+                        popular,
+                        pageable
+                );
+
+        return new DestinationPageResponse(
+                destinationPage.getContent()
+                        .stream()
+                        .map(DestinationResponse::new)
+                        .toList(),
+                destinationPage.getNumber(),
+                destinationPage.getSize(),
+                destinationPage.getTotalElements(),
+                destinationPage.getTotalPages()
+        );
+    }
+
+    private String normalizeFilter(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value.trim();
     }
 
     private Destination findDestinationById(String id) {
