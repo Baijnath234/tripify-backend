@@ -142,5 +142,6 @@ public class DestinationService {
         destination.setAverageBudget(request.getAverageBudget());
         destination.setCurrency(request.getCurrency());
         destination.setActive(request.isActive());
+        destination.setPopular(request.isPopular());
     }
 }
