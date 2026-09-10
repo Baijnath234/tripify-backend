@@ -8,9 +8,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import com.tripify.backend.service.DestinationNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -150,5 +152,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(error);
+    }
+
+    @ExceptionHandler(DestinationNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleDestinationNotFound(
+            DestinationNotFoundException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
     }
 }
