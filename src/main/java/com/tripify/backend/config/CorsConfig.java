@@ -19,7 +19,8 @@ public class CorsConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://localhost:8081",
-                "http://localhost:19006"
+                "http://localhost:19006",
+                "https://tripify-frontend-ashy.vercel.app"
         ));
 
         configuration.setAllowedMethods(List.of(
