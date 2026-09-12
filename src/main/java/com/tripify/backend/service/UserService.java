@@ -14,9 +14,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse getCurrentUser(String userId) {
+    public UserResponse getCurrentUser(String email) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new RuntimeException("User not found")
                 );

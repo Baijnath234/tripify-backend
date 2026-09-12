@@ -62,10 +62,20 @@ public class JwtService {
         try {
             Claims claims = extractAllClaims(token);
 
-            return claims.getExpiration()
+            boolean valid = claims.getExpiration()
                     .after(new Date());
 
+            System.out.println("JWT expiration: " + claims.getExpiration());
+            System.out.println("Current time: " + new Date());
+            System.out.println("JWT valid: " + valid);
+
+            return valid;
+
         } catch (Exception exception) {
+            System.out.println("===== JWT VALIDATION ERROR =====");
+            System.out.println("Exception: " + exception.getClass().getName());
+            System.out.println("Message: " + exception.getMessage());
+
             return false;
         }
     }

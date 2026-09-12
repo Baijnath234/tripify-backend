@@ -22,8 +22,8 @@ public class UserController {
             Authentication authentication
     ) {
 
-        String userId = authentication.getName();
+        String email = authentication.getName();
 
-        return userService.getCurrentUser(userId);
+        return userService.getCurrentUser(email);
     }
 }
